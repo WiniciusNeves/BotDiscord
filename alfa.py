@@ -36,4 +36,4 @@ async def send_message(ctx):
 
 
 
-bot.run("MTE3ODUyODQzNzU2NTE0MDk5Mg.GQrPCz.u_lFMfuwIgEAXLDMoRU-t1rcd8AjLPL2cLyTHA")
+bot.run("seu tokem aqui")
