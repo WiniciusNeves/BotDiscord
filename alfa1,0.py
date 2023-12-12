@@ -59,4 +59,4 @@ async def send_message(ctx):
 
 
 
-bot.run("MTE4Mzk1NTYzNDQ2MzQ1NzMwMA.GllaZ1.ALWJ0lQFrPAu9ZrJBBiUXJPlOAhSiPYyZxeJq0")
+bot.run("TOken aqui")
