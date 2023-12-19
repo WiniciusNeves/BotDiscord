@@ -50,7 +50,7 @@ async def send_message(ctx):
     embed.add_field(name="!stop", value="vai sair da chamada de voz.", inline=False)
     embed.add_field(name="!skip", value="pula uma música.", inline=False)
     embed.add_field(name="!pause", value="vai parar de tocar", inline=False)
-    embed.add_field(name="!lista", value="mostra a lista de musicas (que vai ser reproduzida do bot.", inline=False)
+    embed.add_field(name="!lista", value="mostra a lista de musicas (que vai ser reproduzida do bot).", inline=False)
     embed.add_field(name="!limpar", value="limpa a lista de musicas.", inline=False)
 
     # Set the GIF image
