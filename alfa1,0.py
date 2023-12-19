@@ -3,6 +3,7 @@ from discord.utils import get
 import discord
 import logging
 import os
+import asyncio
 from dotenv import load_dotenv
 import yt_dlp
 
@@ -46,9 +47,11 @@ async def send_message(ctx):
     embed.add_field(name="!biblioteca", value="Mostra o link para a biblioteca.", inline=False)
     embed.add_field(name="!v", value="Mostra a versão do bot.", inline=False)
     embed.add_field(name="!play", value="toca uma música.", inline=False)
-    embed.add_field(name="!stop", value="para de tocar uma música.", inline=False)
+    embed.add_field(name="!stop", value="vai sair da chamada de voz.", inline=False)
     embed.add_field(name="!skip", value="pula uma música.", inline=False)
-    embed.add_field(name="!lista", value="mostra a lista de musicas (que vai ser reproduzida)do bot.", inline=False)
+    embed.add_field(name="!pause", value="vai parar de tocar", inline=False)
+    embed.add_field(name="!lista", value="mostra a lista de musicas (que vai ser reproduzida do bot.", inline=False)
+    embed.add_field(name="!limpar", value="limpa a lista de musicas.", inline=False)
 
     # Set the GIF image
     embed.set_thumbnail(url="https://i.imgur.com/5Igo0sG.gif")
@@ -205,6 +208,17 @@ async def clear_queue(ctx):
     await ctx.send("A fila foi limpa.")
   else:
     await ctx.send("A fila já está vazia.")
+
+
+@bot.command()
+@commands.is_owner() 
+async def sync(ctx,guild=None):
+    if guild == None:
+        await bot.tree.sync()
+    else:
+        await bot.tree.sync(guild=discord.Object(id=int(guild)))
+    await ctx.send("**Sincronizado!**")
+
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 bot.run(TOKEN)
