@@ -1,10 +1,11 @@
-
 from discord.ext import commands,tasks
+from discord.utils import get
 import discord
 import logging
 import os
-import asyncio
 from dotenv import load_dotenv
+import yt_dlp
+
 
 load_dotenv()
 
@@ -84,23 +85,126 @@ async def send_message(ctx):
     response = "versão: 1.0"
     await ctx.send(response)
 
-@bot.command()
-@commands.is_owner() 
-async def sync(ctx,guild=None):
-    if guild == None:
-        await bot.tree.sync()
-    else:
-        await bot.tree.sync(guild=discord.Object(id=int(guild)))
-    await ctx.send("**Sincronizado!** ")
+queue = {}
+ytdl_format_options = {
+  'format': 'bestaudio/best',
+  'quiet': True,
+  'extractaudio': True,
+  'audioformat': 'mp3',
+  'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+  'restrictfilenames': True,
+  'noplaylist': True,
+}
+ffmpeg_options = {
+  'before_options': '-f lavfi -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+  'options': '-vn'
+}
+yytdl = yt_dlp.YoutubeDL(ytdl_format_options)
 
-async def main():
-    async with bot:
-        for filename in os.listdir('c:\\Users\\Winic\\Desktop\\project\\bot\\cogs'):
-            if filename.endswith('.py'):
-                await bot.load_extension(f'cogs.{filename[:-3]}')
+def search_youtube(arg):
+  with yytdl:
+    try:
+      info = yytdl.extract_info(f"ytsearch:{arg}", download=False)['entries'][0]
+    except Exception:
+      return False
+  return {'source': info['formats'][0]['url'], 'title': info['title']}
 
-             
-        TOKEN = os.getenv("DISCORD_TOKEN")
-        await bot.start(TOKEN)
+@bot.command(name='play')
+async def play(ctx, *, search: str):
+  channel = ctx.message.author.voice.channel
+  if channel is None:
+    await ctx.send("Você precisa estar em um canal de voz para tocar uma música.")
+    return
 
-asyncio.run(main())
+  voice_client = get(bot.voice_clients, guild=ctx.guild)
+  if voice_client is None:
+    await channel.connect()
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+
+  if ctx.guild.id not in queue:
+    queue[ctx.guild.id] = []
+
+  song = search_youtube(search)
+  if song:
+    queue[ctx.guild.id].append(song)
+    await ctx.send(f"{song['title']} foi adicionada à fila.")
+  else:
+    await ctx.send("Não encontrei a música requisitada.")
+
+  if not voice_client.is_playing() and not voice_client.is_paused():
+    await play_next(ctx)
+
+async def play_next(ctx):
+  guild_id = ctx.guild.id
+  voice_client = get(bot.voice_clients, guild=ctx.guild)
+
+  if queue[guild_id]:
+    song = queue[guild_id].pop(0)
+    voice_client.play(discord.FFmpegPCMAudio(song['source'], executable='ffmpeg', options=ffmpeg_options))
+    await ctx.send(f"Tocando agora: {song['title']}")
+  else:
+    await ctx.send("A fila está vazia.")
+
+    if voice_client:
+      await voice_client.disconnect()
+
+@bot.command(name='stop')
+async def stop(ctx):
+  voice_client = get(bot.voice_clients, guild=ctx.guild)
+  if voice_client is not None:
+    await voice_client.disconnect()
+    embed = discord.Embed(
+      title="saindo da chamada de voz",
+      description="não querem mais eu aqui ?",
+      color=0x9400d3
+    )
+    embed.set_thumbnail(url="https://gifs.eco.br/wp-content/uploads/2022/03/gif-animado-dando-tchau-20.gif")
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send("Nenhum bot de chamada de voz está conectado.")
+
+@bot.command(name='skip')
+async def skip(ctx):
+  voice_client = get(bot.voice_clients, guild=ctx.guild)
+  if voice_client and voice_client.is_playing():
+    voice_client.stop()
+    await play_next(ctx)
+    embed = discord.Embed(
+      title="Música pulada",
+      description="A próxima música está sendo reproduzida.",
+      color=0x9400d3
+    )
+    embed.set_thumbnail(url="https://gifs.eco.br/wp-content/uploads/2022/09/gifs-de-musica-9.gif")
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send("Nenhuma música está sendo tocada no momento.")
+
+@bot.command(name='pause')
+async def pause(ctx):
+  voice_client = get(bot.voice_clients, guild=ctx.guild)
+  if voice_client and voice_client.is_playing():
+    voice_client.pause()
+    await ctx.send("A reprodução foi pausada.")
+  else:
+    await ctx.send("Não há nada sendo reproduzido no momento.")
+
+@bot.command(name='lista')
+async def show_queue(ctx):
+  guild_id = ctx.guild.id
+  if guild_id in queue and len(queue[guild_id]) > 0:
+    msg = "Fila:\n" + "\n".join([song['title'] for song in queue[guild_id]])
+    await ctx.send(msg)
+  else:
+    await ctx.send("A fila está vazia.")
+
+@bot.command(name='limpa')
+async def clear_queue(ctx):
+  guild_id = ctx.guild.id
+  if guild_id in queue:
+    queue[guild_id] = []
+    await ctx.send("A fila foi limpa.")
+  else:
+    await ctx.send("A fila já está vazia.")
+
+TOKEN = os.getenv("DISCORD_TOKEN")
+bot.run(TOKEN)
