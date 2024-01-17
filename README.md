@@ -20,6 +20,10 @@ Se você estiver interessado em contribuir para o desenvolvimento deste bot, fic
 5. Faça push para a branch (`git push origin feature/nova-funcionalidade`).
 6. Abra um pull request explicando suas alterações.
 
+## Link
+
+Aqui este o link do bot, se tiver interece de colocar no seu servidor [Poro](https://discord.com/api/oauth2/authorize?client_id=1183955634463457300&permissions=8&scope=bot)
+
 ## Agradecimentos
 
 Agradeço pela sua visita a este repositório! Sinta-se à vontade para explorar o código-fonte, relatar problemas ou sugerir melhorias. Seu apoio é fundamental para o aprimoramento contínuo deste projeto.
