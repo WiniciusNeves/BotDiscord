@@ -8,26 +8,62 @@ class Commands(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ajuda")
-    async def ajuda(self, ctx):
+     async def ajuda(ctx):
         page1 = discord.Embed(
-            title="Olá. Poro chegou para ajudar!",
-            description="Confira abaixo a lista de comandos que Poro separou para você:",
+            title="Comandos do Bot (Página 1)",
+            description="Aqui estão os comandos disponíveis:",
             color=0x9400d3
         )
-        page1.add_field(name="!play", value="!play (link do Youtube aqui) para tocar uma música.", inline=False)
-        page1.add_field(name="!stop", value="Remove o bot de música da sala.", inline=False)
-        page1.add_field(name="!skip", value="Pula uma música.", inline=False)
-        page1.add_field(name="!pause", value="Pausa o bot de música.", inline=False)
-        page1.add_field(name="!unpause", value="Despausa o bot de música.", inline=False)
-        page1.add_field(name="!lista", value="Mostra a lista de músicas.", inline=False)
-        page1.add_field(name="!limpar", value="Limpa a lista de músicas.", inline=False)
-
-        page1.add_field(name="!biblioteca", value="Mostra o link para a biblioteca.", inline=False)
+        page1.add_field(name="!ajuda", value="Mostra esta mensagem de ajuda.", inline=False)
         page1.add_field(name="!criador", value="Mostra informações sobre o criador do bot.", inline=False)
+        page1.add_field(name="!biblioteca", value="Mostra o link para a biblioteca.", inline=False)
         page1.add_field(name="!v", value="Mostra a versão do bot.", inline=False)
         page1.set_thumbnail(url="https://i.imgur.com/5Igo0sG.gif")
 
-        await ctx.send(embed=page1)
+        page2 = discord.Embed(
+            title="Comandos do Bot (Página 2)",
+            description="Aqui estão os comandos disponíveis para tocar musicas:",
+            color=0x9400d3
+        )
+        page2.add_field(name="!play", value="Toca uma música.", inline=False)
+        page2.add_field(name="!stop", value="Sai da chamada de voz.", inline=False)
+        page2.add_field(name="!skip", value="Pula uma música.", inline=False)
+        page2.add_field(name="!pause", value="Para de tocar.", inline=False)
+        page2.add_field(name="!unpause", value="Retoma a reprodução.", inline=False)
+        page2.add_field(name="!lista", value="Mostra a lista de músicas.", inline=False)
+        page2.add_field(name="!limpar", value="Limpa a lista de músicas.", inline=False)
+        page2.set_thumbnail(url="https://i.imgur.com/5Igo0sG.gif")
+
+        pages = [page1, page2]
+
+        message = await ctx.send(embed=pages[0])
+        current_page = 0
+        await message.add_reaction("◀️")
+        await message.add_reaction("▶️")
+
+        def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+
+        while True:
+            try:
+                reaction, user = await bot.wait_for("reaction_add", timeout=60, check=check)
+
+                if str(reaction.emoji) == "▶️" and current_page < len(pages) - 1:
+                    current_page += 1
+                    await message.edit(embed=pages[current_page])
+                    await message.remove_reaction(reaction, user)
+
+                elif str(reaction.emoji) == "◀️" and current_page > 0:
+                    current_page -= 1
+                    await message.edit(embed=pages[current_page])
+                    await message.remove_reaction(reaction, user)
+
+                else:
+                    await message.remove_reaction(reaction, user)
+
+            except asyncio.TimeoutError:
+                await message.clear_reactions()
+                break
 
     @commands.command(name="criador")
     async def criador(self, ctx):
