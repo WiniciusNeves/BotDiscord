@@ -1,4 +1,4 @@
-# Discord Bot Repository
+# Poro
 
 Bem-vindo ao repositório do meu Discord Bot (que eu renomei como Poro), um projeto incrível que mantém presença online 24 horas por dia, graças à plataforma/aplicação [DisCloud](https://discloud.app/). Este bot é desenvolvido em Python, utilizando a versão mais recente da linguagem, e faz uso das bibliotecas `discord.py`, `yt-dlp`, `ffmpeg`, entre outras.
 
