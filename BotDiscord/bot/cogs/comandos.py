@@ -12,7 +12,7 @@ class Commands(commands.Cog):
         self.current_page = 0
 
     @commands.command(name="ajuda")
-    async def ajuda(self, ctx):  # Adicione 'self' como primeiro parâmetro
+    async def ajuda(self, ctx): 
         page1 = discord.Embed(
             title="Comandos do Bot (Página 1)",
             description="Aqui estão os comandos disponíveis:",
@@ -70,18 +70,18 @@ class Commands(commands.Cog):
         )
         embed.set_thumbnail(url="https://i.pinimg.com/originals/2f/5c/c5/2f5cc5163100018a4e2670a01b77672e.gif")
 
-        # Criar o botão
+    
         button = Button(
             label="Visite o site do criador.",
             style=ButtonStyle.url,
             url="https://linktr.ee/winiciusneves"
         )
 
-        # Adicionar o botão a uma 'view'
+     
         view = View()
         view.add_item(button)
 
-        # Enviar a mensagem com a embed e a 'view' que contém o botão
+    
         await ctx.send(embed=embed, view=view)
 
     @commands.command(name="biblioteca")
