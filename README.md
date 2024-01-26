@@ -12,14 +12,6 @@ Bem-vindo ao repositório do meu Discord Bot (que eu renomei como Poro), um proj
 ## Como Contribuir
 
 Se você estiver interessado em contribuir para o desenvolvimento deste bot, ficarei feliz em receber suas sugestões, correções ou novas funcionalidades. Siga os passos abaixo para contribuir:
-
-1. Faça um fork do repositório.
-2. Clone o fork para sua máquina local.
-3. Crie uma branch para suas alterações (`git checkout -b feature/nova-funcionalidade`).
-4. Faça suas modificações e commit (`git commit -m 'Adiciona nova funcionalidade'`).
-5. Faça push para a branch (`git push origin feature/nova-funcionalidade`).
-6. Abra um pull request explicando suas alterações.
-
 ## Link
 
 Aqui este o link do bot, se tiver interece de colocar no seu servidor [Poro](https://discord.com/api/oauth2/authorize?client_id=1183955634463457300&permissions=8&scope=bot)
