@@ -4,7 +4,7 @@ Bem-vindo ao repositório do meu Discord Bot (que eu renomei como Poro), um proj
 
 ## Recursos Destacados
 
-- **DisCloud Hosting:** Garante uma presença constante do bot, mantendo-o online para proporcionar uma experiência ininterrupta aos usuários.
+- **Square Cloud Hosting:** Garante uma presença constante do bot, mantendo-o online para proporcionar uma experiência ininterrupta aos usuários.
 - **discord.py:** Biblioteca essencial para interagir com a API do Discord, facilitando o desenvolvimento de funcionalidades robustas e interativas.
 - **yt-dlp:** Utilizado para acessar dados e conteúdo do YouTube, ampliando as capacidades do bot para incorporar mídia de forma eficiente.
 - **ffmpeg:** Ferramenta essencial para manipulação e processamento de áudio, possibilitando recursos avançados para uma experiência de áudio mais rica.
