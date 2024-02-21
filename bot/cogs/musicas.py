@@ -299,10 +299,7 @@ class Musicas(commands.Cog):
                     if voice_client and voice_client.is_playing()
                     else "Não há música sendo reproduzida no momento."
                 )
-
                 
-
-
                 next_song = (
                     f"Próxima música a tocar: **{self.queue[guild_id][1]['title']}**"
                     if len(self.queue[guild_id]) > 1
