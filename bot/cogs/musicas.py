@@ -204,9 +204,6 @@ class Musicas(commands.Cog):
                 print(f"Erro durante a interação de parar: {e}")
 
 
-
-
-
     @commands.command(name='skip')
     async def skip(self, ctx):
         try:
