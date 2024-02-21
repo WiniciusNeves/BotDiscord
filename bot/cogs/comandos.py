@@ -1,5 +1,3 @@
-# cogs/comandos.py
-
 import discord
 from discord.ext import commands
 from discord import Embed, ButtonStyle
