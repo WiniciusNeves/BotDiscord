@@ -1,5 +1,4 @@
 requirements.txt
-discloud.config
 .env
 comandos.cpython-311.pyc
 musicas.cpython-311.pyc
